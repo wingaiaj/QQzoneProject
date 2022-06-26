@@ -5,6 +5,7 @@ import com.zx.QQZone.pojo.UserBasic;
 import com.zx.myssmSpring.BaseDAO.BaseDAO;
 import com.zx.myssmSpring.util.jdbcUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -36,8 +37,15 @@ public class UserBaseDAOImpl extends BaseDAO<UserBasic> implements UserBasicDAO 
     }
 
     @Override
-    public List<UserBasic> getFriendList(UserBasic userBasic) {
-        String sql = "select * from  ";
-        return super.getFriendList()
+    public List<UserBasic> getUserBasicList(UserBasic userBasic) throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException {
+        //返回多个fid包含uid
+        String sql = "select fid as id from t_friend where uid = ?";
+        return super.getListRecord(connection, sql, userBasic.getId());
+    }
+
+    @Override
+    public UserBasic getUserBasicById(Integer id) {
+        String sql = "select * from t_user_basic where id = ? ";
+        return super.getRecord(connection, sql, id);
     }
 }

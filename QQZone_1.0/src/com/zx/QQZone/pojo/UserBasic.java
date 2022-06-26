@@ -22,6 +22,9 @@ public class UserBasic {
 
     public UserBasic() {
     }
+    public UserBasic(Integer id){
+
+    }
 
     public Integer getId() {
         return id;

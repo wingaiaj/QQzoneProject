@@ -3,6 +3,7 @@ package com.zx.QQZone.DAO;
 import com.zx.QQZone.pojo.Topic;
 import com.zx.QQZone.pojo.UserBasic;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  */
 public interface TopicDAO {
     //获取指定用户的所有日志
-    public List<Topic> getTopicList(UserBasic userBasic);
+    public List<Topic> getTopicList(UserBasic userBasic) throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException;
 
     //添加日志
     public void addTopic(Topic topic);

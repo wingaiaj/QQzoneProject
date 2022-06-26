@@ -34,7 +34,7 @@
 
 5.QQZone登录功能实现出现的四个错误：
  1) URL没修改，用的还是fruitdb
- 2）
+ 2） UserBasic没有fid属性 列名 as 为id
  3）rsmd.getColumnName() 和 rsmd.getColumnLabel()
  4）Can not set com.atguigu.qqzone.pojo.UserBasic field com.atguigu.qqzone.pojo.Topic.author to java.lang.Integer
  5) left.html页面没有样式，同时数据也不展示，原因是：我们是直接去请求的静态页面资源，那么并没有执行super.processTemplate()，也就是thymeleaf没有起作用

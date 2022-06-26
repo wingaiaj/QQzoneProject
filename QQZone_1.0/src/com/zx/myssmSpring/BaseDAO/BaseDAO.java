@@ -2,9 +2,7 @@ package com.zx.myssmSpring.BaseDAO;
 
 import com.zx.myssmSpring.util.jdbcUtils;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +81,7 @@ public abstract class BaseDAO<T> {
     }
 
     //获取多条记录
-    public List<T> getListRecord(Connection connection, String sql, Object... args){
+    public List<T> getListRecord(Connection connection, String sql, Object... args) throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException {
 
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -115,6 +113,16 @@ public abstract class BaseDAO<T> {
                     Field declaredField = clazz.getDeclaredField(label);
                     //设置属性为可编辑
                     declaredField.setAccessible(true);
+                    //获取当前属性的类型名
+                    String name = declaredField.getType().getName();
+                    //为true是自定义类型
+                    if (isMyType(name)) {
+                        //获取指定类型构造器
+                        Constructor<?> declaredConstructor = Class.forName(name).getDeclaredConstructor(java.lang.Integer.class);
+                        //创建实例对象
+                         value = declaredConstructor.newInstance((Integer) value);
+
+                    }
                     declaredField.set(t, value);
                 }
                 list.add(t);
@@ -140,6 +148,16 @@ public abstract class BaseDAO<T> {
         return null;
     }
 
+    private static boolean isMyType(String name) {
+        if ("java.lang.Integer".equals(name)
+                || "java.lang.String".equals(name)
+                || "java.lang.Date".equals(name)
+                || "java.sql.Date".equals(name)
+                ||"java.sql.Timestamp".equals(name)) {
+            return false;
+        }
+        return true;
+    }
 
     //更新操作
     public boolean update(Connection connection, String sql, Object... args) {
@@ -167,7 +185,7 @@ public abstract class BaseDAO<T> {
     }
 
     //总条数
-    public Object[] getCount(Connection connection, String sql, Object... args){
+    public Object[] getCount(Connection connection, String sql, Object... args) {
 
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
